@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { MapComponent } from './components/map/map.component';
+import { DataComponent } from './components/data/data.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [MapComponent, DataComponent],
   template: `
-    <h1>Welcome to {{title}}!</h1>
-
-    <router-outlet />
+    <app-map />
+    <app-data />
   `,
   styles: [],
 })

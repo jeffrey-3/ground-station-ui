@@ -1,0 +1,102 @@
+// map.component.scss
+
+// Variables
+$map-background: #e0e0e0;
+$tile-size: 256px;
+$controls-bg: rgba(255, 255, 255, 0.9);
+$controls-border: #999;
+$shadow-color: rgba(0, 0, 0, 0.2);
+$transition-speed: 0.2s;
+
+// Container styles
+.map-container {
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+  background-color: $map-background;
+  touch-action: none;
+  user-select: none;
+  
+  &.dragging {
+    cursor: grabbing;
+  }
+}
+
+// Tile styles
+.map-tile {
+  position: absolute;
+  pointer-events: none;
+  transition: opacity $transition-speed ease-in-out;
+  
+  img {
+    width: $tile-size;
+    height: $tile-size;
+    position: absolute;
+    display: block;
+    
+    // Smooth loading
+    opacity: 0;
+    transition: opacity $transition-speed ease-in-out;
+    
+    &.loaded {
+      opacity: 1;
+    }
+  }
+}
+
+// Controls
+.map-controls {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  
+  button {
+    padding: 0.5rem 1rem;
+    background: $controls-bg;
+    border: 1px solid $controls-border;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px $shadow-color;
+    transition: all $transition-speed ease;
+    
+    &:hover {
+      background: darken($controls-bg, 5%);
+    }
+    
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+}
+
+// Loading indicator
+.tile-loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 500;
+  
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
