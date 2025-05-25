@@ -18,7 +18,7 @@ export class MapComponent implements AfterViewInit {
   private y = 0;
   
   // Geographic coordinates
-  private initialLat = 40.7128; // Default: London
+  private initialLat = 40.7128;
   private initialLon = -74.0060;
   
   private container!: HTMLElement;
@@ -33,6 +33,8 @@ export class MapComponent implements AfterViewInit {
     this.container = this.el.nativeElement.querySelector('.map-container');
     this.setInitialPosition();
     this.renderTiles();
+
+    this.container.addEventListener('mousedown', (event) => this.onMouseDown(event));
   }
 
   // Convert lat/lon to pixel coordinates at current zoom
@@ -133,7 +135,7 @@ export class MapComponent implements AfterViewInit {
     };
     
     img.onerror = () => {
-      console.error(`Failed to load tile: ${tileKey}`);
+      console.log(`Failed to load tile: ${tileKey}`);
       img.style.backgroundColor = '#f0f0f0';
     };
 
@@ -169,33 +171,30 @@ export class MapComponent implements AfterViewInit {
     }
   }
 
-  // Panning controls - FIXED DRAGGING (REVERSED)
-  @HostListener('mousedown', ['$event'])
   onMouseDown(event: MouseEvent): void {
     this.isDragging = true;
     this.startX = event.clientX + this.x;
     this.startY = event.clientY + this.y;
     this.container.style.cursor = 'grabbing';
+
+    document.addEventListener('mousemove', this.onMouseMoveBound);
+    document.addEventListener('mouseup', this.onMouseUpBound);
   }
 
-  @HostListener('mousemove', ['$event'])
-  onMouseMove(event: MouseEvent): void {
+  private onMouseMoveBound = (event: MouseEvent) => {
     if (this.isDragging) {
       this.x = this.startX - event.clientX;
       this.y = this.startY - event.clientY;
       this.renderTiles();
     }
-  }
+  };
 
-  @HostListener('mouseup')
-  onMouseUp(): void {
-    this.isDragging = false;
-    this.container.style.cursor = 'grab';
-  }
-
-  @HostListener('mouseleave')
-  onMouseLeave(): void {
-    this.isDragging = false;
-    this.container.style.cursor = 'grab';
-  }
+  private onMouseUpBound = () => {
+    if (this.isDragging) {
+      this.isDragging = false;
+      this.container.style.cursor = 'grab';
+      document.removeEventListener('mousemove', this.onMouseMoveBound);
+      document.removeEventListener('mouseup', this.onMouseUpBound);
+    }
+  };
 }

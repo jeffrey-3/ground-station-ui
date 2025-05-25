@@ -1,16 +1,25 @@
 import { Component } from '@angular/core';
-import { MapComponent } from './components/map/map.component';
-import { DataComponent } from './components/data/data.component';
+import { FlightDisplayComponent } from './flight-display/flight-display.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
-  imports: [MapComponent, DataComponent],
+  imports: [HeaderComponent, FlightDisplayComponent],
   template: `
-    <app-map />
-    <app-data />
+    <app-header />
+    <main>
+      <app-flight-display />
+    </main>
   `,
-  styles: [],
+  styles: [
+    `
+      main {
+        padding: 16px;
+        overflow-x: hidden;
+      }
+    `,
+  ],
 })
 export class AppComponent {
-  title = 'ground-station-ui';
+  title = 'ground-station-ui'
 }

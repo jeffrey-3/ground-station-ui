@@ -1,4 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy } from '@angular/core';
+import { WebSocketService } from '../../services/web-socket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-data',
@@ -6,9 +8,24 @@ import { Component, signal } from '@angular/core';
   templateUrl: './data.component.html',
   styleUrl: './data.component.scss'
 })
-export class DataComponent {
+export class DataComponent implements OnInit, OnDestroy {
   batt_volts = signal('12.07V');
   counterValue = signal(0);
+  rawData = signal('');
+  private subscription!: Subscription;
+
+  constructor(private webSocketService: WebSocketService) {}
+
+  ngOnInit(): void {
+    this.subscription = this.webSocketService.messages$.subscribe(data => {
+      this.batt_volts.set(data.value);
+      this.rawData.set(JSON.stringify(data))
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   increment() {
     this.counterValue.update((val) => val + 1);
