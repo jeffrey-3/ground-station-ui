@@ -1,22 +1,16 @@
 import { Component } from '@angular/core';
-import { FlightDisplayComponent } from './flight-display/flight-display.component';
+import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, FlightDisplayComponent],
+  imports: [RouterOutlet, HeaderComponent],
   template: `
     <app-header />
-    <main>
-      <app-flight-display />
-    </main>
+    <router-outlet />
   `,
   styles: [
     `
-      main {
-        padding: 16px;
-        overflow-x: hidden;
-      }
     `,
   ],
 })
