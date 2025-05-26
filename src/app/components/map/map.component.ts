@@ -1,64 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlotlyModule } from 'angular-plotly.js';
-import * as PlotlyJS from 'plotly.js-dist-min';
-
-PlotlyModule.plotlyjs = PlotlyJS;
-
-
-// Don't use set altitude input!!!!!!!!!!!!!!!!!!! USE BUTTON THAT OPENS POPUP, but still have an indicator for what the value of setpoint is
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [CommonModule, PlotlyModule],
+  imports: [CommonModule],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss'
 })
 export class MapComponent implements OnInit {
-  public graph: any = {
-    data: [],
-    layout: {}
-  };
-
-  ngOnInit() {
-    this.initMap();
+  ngOnInit(): void {
+    this.configMap();
   }
 
-  initMap() {
-    this.graph = {
-      data: [{
-        type: "scattermap"
-      }],
-      layout: {
-        map: {
-          style: "white-bg",
-          layers: [{
-            sourcetype: "raster",
-            source: ["http://localhost:5000/tiles/{z}/{x}/{y}.png"]
-          }],
-          center: { 
-            lat: 40.7128, 
-            lon: -74.0060 
-          },
-          zoom: 10
-        },
-        margin: { 
-          r: 0, 
-          t: 0, 
-          b: 0, 
-          l: 0 
-        }
-      },
-      config: {
-        responsive: true,
-        scrollZoom: true,
-        displayModeBar: false
-      }
-    };
-  }
+  map: any 
 
-  onPlotlyInit(event: any) {
-    console.log('Plotly initialized', event);
+  configMap() {
+    this.map = L.map('map', {
+      center: [40.3994, -74.0060],
+      zoom: 10,
+      attributionControl: false
+    })
+
+    L.tileLayer("http://localhost:5000/tiles/{z}/{x}/{y}.png").addTo(this.map);
+
+    L.circle([40.3994, -74.0060], {
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.5,
+      radius: 500
+    }).addTo(this.map);
   }
 }
+
+
+// http://localhost:5000/tiles/{z}/{x}/{y}.png
+// 90.3994, -74.0060

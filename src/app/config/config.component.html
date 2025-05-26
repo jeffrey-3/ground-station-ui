@@ -11,6 +11,8 @@
         <button mat-button [routerLink]="['/config/download-tiles']">Download Tiles</button>
     </mat-sidenav>
     <mat-sidenav-content>
-        <router-outlet />
+        <div style="min-height: 100vh;">
+            <router-outlet />
+        </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

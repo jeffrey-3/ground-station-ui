@@ -1,1 +1,84 @@
-3D plotly scatter of magnetometer
+<h1>Gyroscope</h1>
+<button mat-button>Calibrate Gyroscope</button>
+<h1>Compass</h1>
+<button mat-button>Calibrate Compass</button>
+<h1>Accelerometer</h1>
+<p>Hold the plane at the instructed orientation and wait a second before pressing next. The value of the moving average with a 1 second horizon is used.</p>
+<mat-stepper orientation="vertical" [linear]="true" #stepper>
+  <mat-step [editable]="false">
+    <form>
+      <ng-template matStepLabel>Level</ng-template>
+      <div>
+        <br>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [editable]="false">
+    <form>
+      <ng-template matStepLabel>Inverted</ng-template>
+      <div>
+        <br>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [editable]="false">
+    <form>
+      <ng-template matStepLabel>Nose Down</ng-template>
+      <div>
+        <br>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [editable]="false">
+    <form>
+      <ng-template matStepLabel>Nose Up</ng-template>
+      <div>
+        <br>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [editable]="false">
+    <form>
+      <ng-template matStepLabel>Roll Left</ng-template>
+      <div>
+        <br>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [editable]="false">
+    <form>
+      <ng-template matStepLabel>Roll Right</ng-template>
+      <div>
+        <br>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button (click)="stepper.reset()">Cancel</button>
+      <button mat-button (click)="stepper.reset()">Apply</button>
+    </div>
+  </mat-step>
+</mat-stepper>
+
+
+
+
+Parameters file needed to show page
+<br>
+NO  3D plotly scatter of magnetometer for simplicity
+<br>
+Automatically update parameters file
+<br>
+After calibration completed, confirmation dialog to set parameters file
+
+
+<br> After button press, open popup with progress bar and then click cancel or OK
