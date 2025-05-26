@@ -1,9 +1,30 @@
-<p>Batt Volts: {{ batt_volts() }}</p>
-<p>Counter Value: {{ counterValue() }}</p>
+<mat-grid-list cols="2" rowHeight="1:1">
+  <mat-grid-tile>
+    <div class="container">
+        <h1>TKO</h1>
+        <p>Status</p>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div class="container">
+        <h1>10.3</h1>
+        <p>Altitude (m)</p>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div class="container">
+        <h1>16</h1>
+        <p>GPS Sats</p>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div class="container">
+        <h1>{{ batt_volts() }}</h1>
+        <p>Battery (V)</p>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
 
-<div>
-    <button (click)="increment()">Increment</button>
-    <button (click)="reset()">Reset</button>
-</div>
+asdadsadsadsdgajsagsdgajgshdgjhsgd
 
-<p>Raw Data: {{ rawData() }}</p>
+<!-- <p>Raw Data: {{ rawData() }}</p> -->

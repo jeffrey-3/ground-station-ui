@@ -1,15 +1,17 @@
 import { Component, signal, OnInit, OnDestroy } from '@angular/core';
 import { WebSocketService } from '../../services/web-socket.service';
 import { Subscription } from 'rxjs';
+import {MatButtonModule} from '@angular/material/button';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @Component({
   selector: 'app-data',
-  imports: [],
+  imports: [MatButtonModule, MatGridListModule],
   templateUrl: './data.component.html',
   styleUrl: './data.component.scss'
 })
 export class DataComponent implements OnInit, OnDestroy {
-  batt_volts = signal('12.07V');
+  batt_volts = signal('3.89');
   counterValue = signal(0);
   rawData = signal('');
   private subscription!: Subscription;

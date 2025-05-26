@@ -1,6 +1,11 @@
-<div style="display: flex; flex-direction: row; gap: 5px;">
-    <app-data />
-    <app-map />
-    <app-altitude-profile />
-    <app-set-altitude />
-</div>
+<mat-grid-list cols="5" rowHeight="25%">
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <app-set-altitude />
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="4" [rowspan]="4">
+        <app-map />
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="3">
+        <app-data />
+    </mat-grid-tile>
+</mat-grid-list>
