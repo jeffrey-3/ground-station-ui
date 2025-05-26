@@ -1,12 +1,12 @@
 <mat-sidenav-container class="sidenav-container">
     <mat-sidenav mode="side" opened>
-        <button mat-button>Connect</button>
+        <button mat-button [routerLink]="['/config/connect']">Connect</button>
         <br>
-        <button mat-button>Parameters</button>
+        <button mat-button [routerLink]="['/config/parameters']">Parameters</button>
         <br>
-        <button mat-button>Calibration</button>
+        <button mat-button [routerLink]="['/config/calibration']">Calibration</button>
         <br>
-        <button mat-button>Flight Logs</button>
+        <button mat-button [routerLink]="['/config/logs']">Flight Logs</button>
     </mat-sidenav>
     <mat-sidenav-content>
         <router-outlet />

@@ -1,1 +1,10 @@
-<p>connect works!</p>
+<mat-form-field>
+  <mat-label>COM Port</mat-label>
+  <mat-select>
+    @for (food of foods; track food) {
+      <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+<br>
+<button mat-button>Connect</button>
