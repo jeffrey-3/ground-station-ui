@@ -1,12 +1,10 @@
 import { Component, signal, OnInit, OnDestroy } from '@angular/core';
 import { WebSocketService } from '../../services/web-socket.service';
 import { Subscription } from 'rxjs';
-import {MatButtonModule} from '@angular/material/button';
-import {MatGridListModule} from '@angular/material/grid-list';
 
 @Component({
   selector: 'app-data',
-  imports: [MatButtonModule, MatGridListModule],
+  imports: [],
   templateUrl: './data.component.html',
   styleUrl: './data.component.scss'
 })

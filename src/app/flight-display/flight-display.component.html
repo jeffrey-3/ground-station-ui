@@ -1,11 +1,16 @@
-<mat-grid-list cols="5" rowHeight="25%">
-    <mat-grid-tile [colspan]="1" [rowspan]="1">
+<div class="grid">
+    <div class="container">
         <app-set-altitude />
-    </mat-grid-tile>
-    <mat-grid-tile [colspan]="4" [rowspan]="4">
+    </div>
+    <div class="container" style="grid-row: span 2;">
         <app-map />
-    </mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="3">
+    </div>
+    <div class="container">
         <app-data />
-    </mat-grid-tile>
-</mat-grid-list>
+    </div>
+</div>
+        
+
+        
+
+        

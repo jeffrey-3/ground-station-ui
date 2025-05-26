@@ -5,6 +5,7 @@ import { ConnectComponent } from './connect/connect.component';
 import { ParametersComponent } from './parameters/parameters.component';
 import { CalibrationComponent } from './calibration/calibration.component';
 import { LogsComponent } from './logs/logs.component';
+import { DownloadTilesComponent } from './download-tiles/download-tiles.component';
 
 export const routes: Routes = [
     {
@@ -32,6 +33,10 @@ export const routes: Routes = [
                 path: 'logs',
                 component: LogsComponent
             },
+            {
+                path: 'download-tiles',
+                component: DownloadTilesComponent
+            }
         ]
     },
     {

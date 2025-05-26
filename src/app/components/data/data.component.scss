@@ -1,8 +1,8 @@
-.container {
-    text-align: center;
+.grid {
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
-mat-grid-list {
-    height: 100%;
-    width: 100%;
+.container {
+    text-align: center;
 }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AltitudeProfileComponent } from './altitude-profile.component';
+import { DownloadTilesComponent } from './download-tiles.component';
 
-describe('AltitudeProfileComponent', () => {
-  let component: AltitudeProfileComponent;
-  let fixture: ComponentFixture<AltitudeProfileComponent>;
+describe('DownloadTilesComponent', () => {
+  let component: DownloadTilesComponent;
+  let fixture: ComponentFixture<DownloadTilesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AltitudeProfileComponent]
+      imports: [DownloadTilesComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AltitudeProfileComponent);
+    fixture = TestBed.createComponent(DownloadTilesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

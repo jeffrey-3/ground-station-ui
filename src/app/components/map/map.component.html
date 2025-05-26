@@ -1,3 +1,6 @@
-<div class="map-container" style="width: 500px; height: 500px; overflow: hidden; position: relative; cursor: grab;"></div>
-<button (click)="zoomIn()">+</button>
-<button (click)="zoomOut()">-</button>
+<plotly-plot 
+    [data]="graph.data" 
+    [layout]="graph.layout" 
+    [config]="graph.config"
+    [style]="{width: '100%', height: '100%'}"
+></plotly-plot>
