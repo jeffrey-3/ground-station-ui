@@ -11,5 +11,9 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './set-altitude.component.scss'
 })
 export class SetAltitudeComponent {
-
+  onAltitudeChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    console.log('Altitude changed to:', value);
+  }
 }

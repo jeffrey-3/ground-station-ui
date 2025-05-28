@@ -53,6 +53,7 @@ export class MapComponent implements OnInit {
     })
 
     L.control.scale().addTo(this.map);
+    
 
     this.map.contextmenu.enable();
     this.map.contextmenu.addItem({
@@ -99,10 +100,30 @@ export class MapComponent implements OnInit {
     }).addTo(this.map);
 
     this.map.on(L.Draw.Event.CREATED, (e: any) => {
-      this.drawnItems.clearLayers();
-      
-      const layer = e.layer;
-      this.drawnItems.addLayer(layer);
+      const dialogRef = this.dialog.open(LoiterDialogComponent, {
+        position: {
+          top: '50px',
+          left: '50px'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.drawnItems.clearLayers();
+
+          const layer = e.layer;
+          this.drawnItems.addLayer(layer);
+
+          const latlng = layer.getLatLngs().at(-1);
+
+          L.circle([latlng.lat, latlng.lng], {
+            color: '#3388ff',
+            opacity: 0.5,
+            fill: false,
+            radius: result.radius
+          }).addTo(this.drawnItems);
+        }
+      });
     });
   }
 
@@ -121,7 +142,7 @@ export class MapComponent implements OnInit {
       {
         this.drawnItems.clearLayers();
 
-        const finalLegPosition = this.translateLatLon(latlng.lat, latlng.lng, result.extendFinalLeg, result.runwayHeading);
+        const finalLegPosition = this.translateLatLon(latlng.lat, latlng.lng, result.extendFinalLeg, result.runwayHeading + 180);
 
         L.polyline([[latlng.lat, latlng.lng], [finalLegPosition.lat, finalLegPosition.lon]], {
           color: '#3388ff',

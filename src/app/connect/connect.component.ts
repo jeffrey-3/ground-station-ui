@@ -4,7 +4,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { ConfirmDialogService } from '../services/confirm-dialog.service';
+import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Food {
   value: string;
@@ -24,21 +25,18 @@ export class ConnectComponent {
     {value: 'tacos-2', viewValue: 'Tacos'},
   ];
 
-  constructor(private confirmDialogService: ConfirmDialogService) {}
+  constructor(private dialog: MatDialog) {}
 
   openConfirmDialog() {
-    this.confirmDialogService.confirm(
+    ConfirmDialogComponent.open(
+      this.dialog,
       'Confirm Connect',
-      'Are you sure you want to connect?',
-      'OK',
-      'Cancel'
-    ).subscribe(result => {
+      'Connect to vehicle?',
+    ).subscribe((result: boolean | undefined) => {
       if (result) {
-        // User confirmed - perform delete action
-        console.log('Item deleted');
+        console.log('Sent');
       } else {
-        // User cancelled
-        console.log('Deletion cancelled');
+        console.log('Cancelled');
       }
     });
   }

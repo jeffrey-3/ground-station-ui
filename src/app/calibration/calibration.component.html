@@ -1,7 +1,7 @@
 <h1>Gyroscope</h1>
-<button mat-button>Calibrate Gyroscope</button>
+<button mat-button (click)="openConfirmDialog()">Calibrate Gyroscope</button>
 <h1>Compass</h1>
-<button mat-button>Calibrate Compass</button>
+<button mat-button (click)="openConfirmDialog()">Calibrate Compass</button>
 <h1>Accelerometer</h1>
 <p>Hold the plane at the instructed orientation and wait a second before pressing next. The value of the moving average with a 1 second horizon is used.</p>
 <mat-stepper orientation="vertical" [linear]="true" #stepper>
