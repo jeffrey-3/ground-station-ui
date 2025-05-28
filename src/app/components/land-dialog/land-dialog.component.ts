@@ -21,11 +21,11 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './land-dialog.component.scss'
 })
 export class LandDialogComponent {
-  runwayHeading = new FormControl(0);
-  glideslopeAngle = new FormControl(0);
-  extendFinalLeg = new FormControl(0);
-  loiterAltitude = new FormControl({value: 0, disabled: true});
-  loiterRadius = new FormControl(0);
+  runwayHeading = new FormControl(<number | null>null);
+  glideslopeAngle = new FormControl(<number | null>null);
+  extendFinalLeg = new FormControl(<number | null>null);
+  loiterAltitude = new FormControl({value: <number | null>null, disabled: true});
+  loiterRadius = new FormControl(<number | null>null);
 
   constructor(public dialogRef: MatDialogRef<LandDialogComponent>) {
     // Calculate loiter altitude when glideslope or extend final leg changes

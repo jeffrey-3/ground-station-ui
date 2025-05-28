@@ -1,20 +1,27 @@
 <h2 mat-dialog-title>Loiter</h2>
 <mat-dialog-content>
-  <div>
-    <mat-radio-group [(ngModel)]="direction">
-      <label>Direction: </label>
-      <mat-radio-button value="left">Left</mat-radio-button>
-      <mat-radio-button value="right">Right</mat-radio-button>
-    </mat-radio-group>
-  </div>
-  <div>
-    <mat-form-field>
-      <mat-label>Radius (m)</mat-label>
-      <input matInput type="number" [(ngModel)]="radius">
-    </mat-form-field>
-  </div>
+  <form #loiterForm="ngForm">
+    <div>
+      <mat-radio-group [(ngModel)]="direction" name="direction">
+        <label>Direction: </label>
+        <mat-radio-button value="left">Left</mat-radio-button>
+        <mat-radio-button value="right">Right</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Radius (m)</mat-label>
+        <input matInput type="number" [(ngModel)]="radius" name="radius" 
+               required min="5" #radiusInput="ngModel">
+        <mat-error *ngIf="radiusInput.invalid">
+          Radius must be at least 5 meters
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button (click)="onSubmit()" cdkFocusInitial>Submit</button>
+  <button mat-button (click)="onSubmit()" cdkFocusInitial 
+          [disabled]="!loiterForm.valid">Submit</button>
 </mat-dialog-actions>

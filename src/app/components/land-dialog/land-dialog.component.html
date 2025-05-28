@@ -1,37 +1,53 @@
 <h2 mat-dialog-title>Approach and Land</h2>
 <mat-dialog-content>
-    <mat-form-field>
-        <mat-label>Runway Heading (deg)</mat-label>
-        <input matInput [formControl]="runwayHeading" type="number">
-    </mat-form-field>
-    <br>
-    <mat-form-field>
-        <mat-label>Glideslope Angle (deg)</mat-label>
-        <input matInput [formControl]="glideslopeAngle" type="number" min="0" max="10">
-    </mat-form-field>
-    <br>
-    <mat-form-field>
-        <mat-label>Extend Final Leg (m)</mat-label>
-        <input matInput [formControl]="extendFinalLeg" type="number" min="0">
-    </mat-form-field>
-    <br>
-    <mat-form-field>
-        <mat-label>Loiter Altitude (m)</mat-label>
-        <input matInput [formControl]="loiterAltitude" type="number">
-    </mat-form-field>
-    <br>
-    <mat-form-field>
-        <mat-label>Loiter Radius (m)</mat-label>
-        <input matInput [formControl]="loiterRadius" type="number" min="0">
-    </mat-form-field>
+    <form>
+        <mat-form-field>
+            <mat-label>Runway Heading (deg)</mat-label>
+            <input matInput [formControl]="runwayHeading" type="number">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Glideslope Angle (deg)</mat-label>
+            <input matInput [formControl]="glideslopeAngle" type="number" min="0" max="10">
+            <mat-error *ngIf="glideslopeAngle.hasError('min') || glideslopeAngle.hasError('max')">
+                Must be between 0 and 10 degrees
+            </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Extend Final Leg (m)</mat-label>
+            <input matInput [formControl]="extendFinalLeg" type="number" min="0">
+            <mat-error *ngIf="extendFinalLeg.hasError('min')">
+                Must be 0 or greater
+            </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Loiter Altitude (m)</mat-label>
+            <input matInput [formControl]="loiterAltitude" type="number">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Loiter Radius (m)</mat-label>
+            <input matInput [formControl]="loiterRadius" type="number" min="5">
+            <mat-error *ngIf="loiterRadius.hasError('min')">
+                Minimum radius is 5 meters
+            </mat-error>
+        </mat-form-field>
+    </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-button [mat-dialog-close]="{
-      runwayHeading: runwayHeading.value,
-      glideslopeAngle: glideslopeAngle.value,
-      extendFinalLeg: extendFinalLeg.value,
-      loiterAltitude: loiterAltitude.value,
-      loiterRadius: loiterRadius.value
-    }" cdkFocusInitial>Submit</button>
+    <button mat-button 
+            [mat-dialog-close]="{
+              runwayHeading: runwayHeading.value,
+              glideslopeAngle: glideslopeAngle.value,
+              extendFinalLeg: extendFinalLeg.value,
+              loiterAltitude: loiterAltitude.value,
+              loiterRadius: loiterRadius.value
+            }" 
+            [disabled]="!loiterRadius.valid || !glideslopeAngle.valid || !extendFinalLeg.valid"
+            cdkFocusInitial>
+        Submit
+    </button>
 </mat-dialog-actions>

@@ -28,7 +28,7 @@ import { Inject } from '@angular/core';
 })
 export class LoiterDialogComponent {
   direction: string = 'left'; // Default value
-  radius: number = 0;
+  radius: number | null = null;
 
   constructor(
     public dialogRef: MatDialogRef<LoiterDialogComponent>,
