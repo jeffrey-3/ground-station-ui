@@ -6,6 +6,7 @@ import { ParametersComponent } from './parameters/parameters.component';
 import { CalibrationComponent } from './calibration/calibration.component';
 import { LogsComponent } from './logs/logs.component';
 import { DownloadTilesComponent } from './download-tiles/download-tiles.component';
+import { RawComponent } from './raw/raw.component';
 
 export const routes: Routes = [
     {
@@ -42,5 +43,9 @@ export const routes: Routes = [
     {
         path: 'telemetry',
         component: FlightDisplayComponent
+    },
+    {
+        path: 'raw',
+        component: RawComponent
     }
 ];

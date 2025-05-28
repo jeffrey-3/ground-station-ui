@@ -1,25 +1,23 @@
 import { Component, signal, OnInit, OnDestroy } from '@angular/core';
-import { WebSocketService } from '../../services/web-socket.service';
+import { WebSocketService } from '../services/web-socket.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-data',
+  selector: 'app-raw',
   imports: [],
-  templateUrl: './data.component.html',
-  styleUrl: './data.component.scss'
+  templateUrl: './raw.component.html',
+  styleUrl: './raw.component.scss'
 })
-export class DataComponent implements OnInit, OnDestroy {
-  batteryVoltage = signal(0);
-  sats = signal(0);
+export class RawComponent implements OnInit, OnDestroy {
+  rawData = signal('');
 
   private subscription!: Subscription;
-
+  
   constructor(private webSocketService: WebSocketService) {}
 
   ngOnInit(): void {
     this.subscription = this.webSocketService.messages$.subscribe(data => {
-      this.batteryVoltage.set(Math.round(data.battery_voltage * 100) / 100);
-      this.sats.set(data.sats);
+      this.rawData.set(JSON.stringify(data, null, 2))
     });
   }
 

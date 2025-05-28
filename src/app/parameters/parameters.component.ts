@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ConfirmDialogService } from '../services/confirm-dialog.service';
+import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-parameters',
@@ -10,21 +11,18 @@ import { ConfirmDialogService } from '../services/confirm-dialog.service';
   styleUrl: './parameters.component.scss'
 })
 export class ParametersComponent {
-  constructor(private confirmDialogService: ConfirmDialogService) {}
+  constructor(private dialog: MatDialog) {}
 
   openConfirmDialog() {
-    this.confirmDialogService.confirm(
+    ConfirmDialogComponent.open(
+      this.dialog,
       'Confirm Parameters',
       'Send parameters to vehicle?',
-      'OK',
-      'Cancel'
-    ).subscribe(result => {
+    ).subscribe((result: boolean | undefined) => {
       if (result) {
-        // User confirmed - perform delete action
-        console.log('Item deleted');
+        console.log('Sent');
       } else {
-        // User cancelled
-        console.log('Deletion cancelled');
+        console.log('Cancelled');
       }
     });
   }

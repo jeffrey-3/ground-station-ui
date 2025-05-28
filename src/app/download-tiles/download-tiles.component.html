@@ -1,17 +1,37 @@
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <mat-label>Latitude (deg)</mat-label>
-    <input matInput type="number">
-  </mat-form-field>
+<mat-form-field>
+  <mat-label>Latitude (deg)</mat-label>
+  <input matInput type="number" value=40.7128 step=0.0001 [(ngModel)]="lat">
+</mat-form-field>
+<br>
+<mat-form-field>
+  <mat-label>Longitude (deg)</mat-label>
+  <input matInput type="number" value=-74.006 step=0.0001 [(ngModel)]="lon">
+</mat-form-field>
+<br>
+<mat-form-field>
+  <mat-label>Size (m)</mat-label>
+  <input matInput type="number" value=1000 [(ngModel)]="sizeMeters">
+</mat-form-field>
+<br>
+<mat-form-field>
+  <mat-label>Min Zoom</mat-label>
+  <input matInput type="number" value=0 [(ngModel)]="minZoom">
+</mat-form-field>
+<br>
+<mat-form-field>
+  <mat-label>Max Zoom</mat-label>
+  <input matInput type="number" value=18 [(ngModel)]="maxZoom">
+</mat-form-field>
+<br>
+<button mat-button (click)="startPreloading()" [disabled]="isLoading">
+  {{ isLoading ? 'Downloading...' : 'Download' }}
+</button>
+<button mat-button (click)="cancelPreloading()" [disabled]="!isLoading">Cancel</button>
+<br><br>
+<div *ngIf="statusMessage" class="status-message">{{ statusMessage }}</div>
+<br>
+<div *ngIf="isLoading" class="progress-container">
+  <mat-progress-bar mode="determinate" [value]="100*progress/total" style="width: 300px;"></mat-progress-bar>
   <br>
-  <mat-form-field class="example-full-width">
-    <mat-label>Longitude (deg)</mat-label>
-    <input matInput type="number">
-  </mat-form-field>
-  <br>
-  <mat-form-field class="example-full-width">
-    <mat-label>Size (m)</mat-label>
-    <input matInput type="number">
-  </mat-form-field>
-</form>
-<button mat-button>Download</button>
+  <div class="progress-text">{{ progress }} / {{ total }} tiles</div>
+</div>

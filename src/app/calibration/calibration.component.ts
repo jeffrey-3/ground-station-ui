@@ -19,12 +19,5 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './calibration.component.scss'
 })
 export class CalibrationComponent {
-  private _formBuilder = inject(FormBuilder);
 
-  firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
-  });
-  secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
-  });
 }
