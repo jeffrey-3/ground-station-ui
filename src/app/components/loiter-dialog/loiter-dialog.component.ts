@@ -11,6 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import { Inject } from '@angular/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 @Component({
   selector: 'app-loiter-dialog',
   standalone: true,
@@ -21,13 +23,14 @@ import { Inject } from '@angular/core';
     MatFormFieldModule, 
     MatInputModule, 
     MatRadioModule,
+    DragDropModule,
     FormsModule // Required for ngModel
   ],
   templateUrl: './loiter-dialog.component.html',
   styleUrl: './loiter-dialog.component.scss'
 })
 export class LoiterDialogComponent {
-  direction: string = 'left'; // Default value
+  direction: string = 'left';
   radius: number | null = null;
 
   constructor(

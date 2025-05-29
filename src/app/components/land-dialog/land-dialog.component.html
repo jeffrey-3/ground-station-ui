@@ -34,6 +34,12 @@
                 Minimum radius is 5 meters
             </mat-error>
         </mat-form-field>
+        <br>
+        <mat-label>Loiter Direction</mat-label>
+            <mat-radio-group [formControl]="loiterDirection">
+            <mat-radio-button value="left">Left</mat-radio-button>
+            <mat-radio-button value="right">Right</mat-radio-button>
+        </mat-radio-group>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
@@ -44,7 +50,8 @@
               glideslopeAngle: glideslopeAngle.value,
               extendFinalLeg: extendFinalLeg.value,
               loiterAltitude: loiterAltitude.value,
-              loiterRadius: loiterRadius.value
+              loiterRadius: loiterRadius.value,
+              loiterDirection: loiterDirection.value
             }" 
             [disabled]="!loiterRadius.valid || !glideslopeAngle.valid || !extendFinalLeg.valid"
             cdkFocusInitial>

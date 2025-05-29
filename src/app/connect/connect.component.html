@@ -1,8 +1,8 @@
 <mat-form-field>
   <mat-label>COM Port</mat-label>
-  <mat-select>
-    @for (food of foods; track food) {
-      <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+  <mat-select [(ngModel)]="selectedPort">
+    @for (port of ports; track port) {
+      <mat-option [value]="port">{{port}}</mat-option>
     }
   </mat-select>
 </mat-form-field>

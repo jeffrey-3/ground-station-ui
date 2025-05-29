@@ -37,6 +37,14 @@ export class WebSocketService {
     };
   }
 
+  public send(data: any): void {
+    if (this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(JSON.stringify(data));
+    } else {
+      console.error('WebSocket is not open. Cannot send data.');
+    }
+  }
+
   public close(): void {
     if (this.socket) {
       this.socket.close();

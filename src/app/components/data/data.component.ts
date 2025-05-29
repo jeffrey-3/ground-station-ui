@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 export class DataComponent implements OnInit, OnDestroy {
   batteryVoltage = signal(0);
   sats = signal(0);
+  altitude = signal(10.3);
 
   private subscription!: Subscription;
 

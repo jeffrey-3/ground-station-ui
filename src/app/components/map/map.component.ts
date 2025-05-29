@@ -50,24 +50,23 @@ export class MapComponent implements OnInit {
       zoom: 17,
       zoomControl: false,
       attributionControl: false
-    })
+    });
 
     L.control.scale().addTo(this.map);
-    
 
     this.map.contextmenu.enable();
     this.map.contextmenu.addItem({
-      text: 'Land Aircraft Here',
+      text: 'Land',
       callback: (e: L.LeafletMouseEvent) => this.land(e)
-    })
+    });
     this.map.contextmenu.addItem({
-      text: 'Loiter Here',
+      text: 'Loiter',
       callback: (e: L.LeafletMouseEvent) => this.loiter(e)
-    })
+    });
 
     L.tileLayer("http://localhost:5000/tiles/{z}/{x}/{y}.png", {
       maxNativeZoom: 17,
-      maxZoom: 22
+      maxZoom: 25
     }).addTo(this.map);
 
     var aircraftIcon = L.icon({
@@ -102,8 +101,8 @@ export class MapComponent implements OnInit {
     this.map.on(L.Draw.Event.CREATED, (e: any) => {
       const dialogRef = this.dialog.open(LoiterDialogComponent, {
         position: {
-          top: '50px',
-          left: '50px'
+          top: '30px',
+          left: '30px'
         }
       });
 
@@ -119,6 +118,7 @@ export class MapComponent implements OnInit {
           L.circle([latlng.lat, latlng.lng], {
             color: '#3388ff',
             opacity: 0.5,
+            weight: 4,
             fill: false,
             radius: result.radius
           }).addTo(this.drawnItems);
@@ -132,8 +132,8 @@ export class MapComponent implements OnInit {
 
     const dialogRef = this.dialog.open(LandDialogComponent, {
       position: {
-        top: '50px',
-        left: '50px'
+        top: '30px',
+        left: '30px'
       }
     });
 
@@ -149,11 +149,18 @@ export class MapComponent implements OnInit {
           opacity: 0.5
         }).addTo(this.drawnItems);
 
-        const loiterPosition = this.translateLatLon(finalLegPosition.lat, finalLegPosition.lon, result.loiterRadius, result.runwayHeading + 90);
+        var perpendicularBearing;
+        if (result.loiterDirection === 'right') {
+          perpendicularBearing = result.runwayHeading + 90;
+        } else {
+          perpendicularBearing = result.runwayHeading - 90
+        }
+        const loiterPosition = this.translateLatLon(finalLegPosition.lat, finalLegPosition.lon, result.loiterRadius, perpendicularBearing);
 
         L.circle([loiterPosition.lat, loiterPosition.lon], {
           color: '#3388ff',
           opacity: 0.5,
+          weight: 4,
           fill: false,
           radius: result.loiterRadius
         }).addTo(this.drawnItems);
@@ -166,8 +173,8 @@ export class MapComponent implements OnInit {
 
     const dialogRef = this.dialog.open(LoiterDialogComponent, {
       position: {
-        top: '50px',
-        left: '50px'
+        top: '30px',
+        left: '30px'
       }
     });
 
@@ -178,6 +185,7 @@ export class MapComponent implements OnInit {
         L.circle([latlng.lat, latlng.lng], {
           color: '#3388ff',
           opacity: 0.5,
+          weight: 4,
           fill: false,
           radius: result.radius
         }).addTo(this.drawnItems);

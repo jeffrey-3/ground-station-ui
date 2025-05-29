@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
   selector: 'app-land-dialog',
@@ -15,6 +16,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
     MatButtonModule, 
     MatFormFieldModule, 
     MatInputModule,
+    MatRadioModule,
     ReactiveFormsModule
   ],
   templateUrl: './land-dialog.component.html',
@@ -26,6 +28,7 @@ export class LandDialogComponent {
   extendFinalLeg = new FormControl(<number | null>null);
   loiterAltitude = new FormControl({value: <number | null>null, disabled: true});
   loiterRadius = new FormControl(<number | null>null);
+  loiterDirection = new FormControl<'left' | 'right'>('left');
 
   constructor(public dialogRef: MatDialogRef<LandDialogComponent>) {
     // Calculate loiter altitude when glideslope or extend final leg changes
@@ -52,7 +55,8 @@ export class LandDialogComponent {
       glideslopeAngle: this.glideslopeAngle.value,
       extendFinalLeg: this.extendFinalLeg.value,
       loiterAltitude: this.loiterAltitude.value,
-      loiterRadius: this.loiterRadius.value
+      loiterRadius: this.loiterRadius.value,
+      loiterDirection: this.loiterDirection.value
     });
   }
 }
