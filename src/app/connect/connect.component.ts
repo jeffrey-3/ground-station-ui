@@ -6,10 +6,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { WebSocketService } from '../services/web-socket.service';
-import { StateService } from '../services/state.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { WebSocketService } from '../services/web-socket.service';
 
 @Component({
   selector: 'app-connect',
@@ -27,32 +26,31 @@ import { CommonModule } from '@angular/common';
 export class ConnectComponent implements OnInit, OnDestroy {
   ports: string[] = [];
   selectedPort: string = "";
+  isConnected: boolean = false;
 
   private subscription!: Subscription;
 
   constructor(
-    private dialog: MatDialog, 
-    private webSocketService: WebSocketService, 
-    private stateService: StateService
+    private dialog: MatDialog,
+    private webSocketService: WebSocketService
   ) {}
 
   ngOnInit(): void {
-    this.ports = this.stateService.getComPorts();
-    this.selectedPort = this.stateService.getPort();
-
     this.subscription = this.webSocketService.messages$.subscribe(data => {
-      if (data.type === 'ports') {
-        this.ports = data.ports;
+      this.ports = data.serial.ports;
+
+      if (data.serial.connected_port != "") {
+        this.selectedPort = data.serial.connected_port;
+        this.isConnected = true;
       }
     });
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-    this.stateService.setComPorts(this.ports);
   }
 
-  openConfirmDialog() {
+  openConfirmDialog() { 
     ConfirmDialogComponent.open(
       this.dialog,
       'Confirm Connect',
@@ -60,10 +58,9 @@ export class ConnectComponent implements OnInit, OnDestroy {
     ).subscribe((result: boolean | undefined) => {
       if (result) {
         console.log(this.selectedPort);
-        this.stateService.setPort(this.selectedPort);
-        console.log(this.stateService.getPort());
-        
         console.log('Sent');
+
+        this.webSocketService.connectComPort(this.selectedPort);
       } else {
         console.log('Cancelled');
       }

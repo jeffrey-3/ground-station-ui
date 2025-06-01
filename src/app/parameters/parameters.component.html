@@ -1,6 +1,10 @@
 <div class="file-upload">
-    No file uploaded yet. 
-    <button mat-icon-button>
+    <p class="file-name" *ngIf="!file; else fileName">No file uploaded yet.</p>
+    <ng-template #fileName>
+        <p class="file-name">{{ file?.name }}</p>
+    </ng-template>
+    <input type="file" style="display: none" #fileInput (change)="onChangeFileInput()" accept=".json,application/json" />
+    <button mat-icon-button class="file-select-button" (click)="onClickFileInputButton()">
         <mat-icon>attach_file</mat-icon>
     </button>
 </div>

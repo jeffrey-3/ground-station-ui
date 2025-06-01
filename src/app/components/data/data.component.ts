@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 export class DataComponent implements OnInit, OnDestroy {
   batteryVoltage = signal(0);
   sats = signal(0);
-  altitude = signal(10.3);
+  altitude = signal(0);
 
   private subscription!: Subscription;
 
@@ -19,8 +19,10 @@ export class DataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.webSocketService.messages$.subscribe(data => {
-      this.batteryVoltage.set(Math.round(data.battery_voltage * 100) / 100);
-      this.sats.set(data.sats);
+      const telem = data.telemetry;
+      this.batteryVoltage.set(Math.round(telem.batt_voltage * 100) / 100);
+      this.sats.set(telem.gps_sats);
+      this.altitude.set(telem.altitude);
     });
   }
 

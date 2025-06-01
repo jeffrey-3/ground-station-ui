@@ -1,10 +1,10 @@
 <mat-form-field>
   <mat-label>COM Port</mat-label>
-  <mat-select [(ngModel)]="selectedPort">
+  <mat-select [(ngModel)]="selectedPort" [disabled]="isConnected">
     @for (port of ports; track port) {
       <mat-option [value]="port">{{port}}</mat-option>
     }
   </mat-select>
 </mat-form-field>
 <br>
-<button mat-button (click)="openConfirmDialog()">Connect</button>
+<button mat-button (click)="openConfirmDialog()" [disabled]="isConnected">Connect</button>
