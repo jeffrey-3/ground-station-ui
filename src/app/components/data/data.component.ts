@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './data.component.scss'
 })
 export class DataComponent implements OnInit, OnDestroy {
+  status = signal('---');
   batteryVoltage = signal(0);
   sats = signal(0);
   altitude = signal(0);
@@ -19,10 +20,12 @@ export class DataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.webSocketService.messages$.subscribe(data => {
-      const telem = data.telemetry;
-      this.batteryVoltage.set(Math.round(telem.batt_voltage * 100) / 100);
-      this.sats.set(telem.gps_sats);
-      this.altitude.set(telem.altitude);
+      if (data.type === "vehicle_status") {
+        this.status.set(data.mode);
+        this.batteryVoltage.set(12.5);
+        this.sats.set(15);
+        this.altitude.set(11.2);
+      }
     });
   }
 

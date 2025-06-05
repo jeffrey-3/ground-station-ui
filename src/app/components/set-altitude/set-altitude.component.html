@@ -1,7 +1,7 @@
 <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100%;">
   <mat-form-field>
-    <mat-label>Set Altitude (m)</mat-label>
-    <input matInput type="number">
+    <mat-label>Target Altitude (m): {{ currentTargetAltitude() }}</mat-label>
+    <input matInput type="number" [(ngModel)]="targetAltitude" #input>
   </mat-form-field>
-  <button mat-flat-button (click)="openConfirmDialog()">Confirm</button>
+  <button mat-flat-button (click)="openConfirmDialog()" [disabled]="!targetAltitude">Confirm</button>
 </div>

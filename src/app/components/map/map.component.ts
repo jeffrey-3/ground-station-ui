@@ -34,58 +34,87 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.configMap();
 
+    if (this.webSocketService.isOpen()) {
+      this.webSocketService.send({
+        type: 'get_current_mission'
+      });
+      console.log("Requested current mission...");
+    }
+
+    this.webSocketService.socketOpen$.subscribe(() => {
+      this.webSocketService.send({
+        type: 'get_current_mission'
+      });
+      console.log("Requested current mission...");
+    });
+
     this.subscription = this.webSocketService.messages$.subscribe(data => {
-      const telem = data.telemetry;
+      console.log(data.type);
+      if (data.type === "vehicle_status") {
+        var newLatLng = new L.LatLng(data.lat, data.lon);
 
-      var newLatLng = new L.LatLng(telem.lat, telem.lon);
+        this.marker.setLatLng(newLatLng);
+        this.marker._icon.style[L.DomUtil.TRANSFORM] += 'rotate(' + data.yaw + 'deg)';
+        this.marker._icon.style["transform-origin"] = "50% 50%";
+      } else if (data.type === "mission") {
+        if (data.data[0].type === "waypoint") {
+          this.drawnItems.clearLayers();
+          
+          const points: [number, number][] = []
+        
+          data.data.forEach((point: any) => {
+            points.push([point.lat, point.lon]);
+          });
+            
+          this.drawPath(points, data.data[0].radius);
+        }
+      }
 
-      this.marker.setLatLng(newLatLng);
-      this.marker._icon.style[L.DomUtil.TRANSFORM] += 'rotate(' + telem.heading + 'deg)';
-      this.marker._icon.style["transform-origin"] = "50% 50%";
+      // if (data.type === "tasdsadssd") {
+      //   const telem = data.telemetry;
+
+      //   var newLatLng = new L.LatLng(telem.lat, telem.lon);
+
+      //   this.marker.setLatLng(newLatLng);
+      //   this.marker._icon.style[L.DomUtil.TRANSFORM] += 'rotate(' + telem.heading + 'deg)';
+      //   this.marker._icon.style["transform-origin"] = "50% 50%";
+        
+      //   const mission = data.mission
+
+      //   if (mission.type != null && !this.isSameMission(this.currentMission, mission)) {
+      //     this.currentMission = mission;
+      //     this.drawnItems.clearLayers();
+
+      //     switch (mission.type) {
+      //       case "loiter":
+      //         this.drawLoiter(mission.data.lat, mission.data.lon, mission.data.radius);
+      //         break;
+      //       case "path":
+      //         this.drawPath(mission.data.points, mission.data.radius);
+      //         break;
+      //       case "land":
+      //         this.drawLand(
+      //           mission.data.lat,
+      //           mission.data.lon,
+      //           mission.data.heading,
+      //           mission.data.finalLeg,
+      //           mission.data.radius,
+      //           mission.data.direction
+      //         );
+      //         break;
+      //     }
+      //   }
+      // }
 
       var visible = this.map.getBounds().contains(this.marker.getLatLng());
       if (!visible) {
         this.map.panTo(this.marker.getLatLng());
-      }
-      
-      const mission = data.mission
-
-      if (mission.type != null && !this.isSameMission(this.currentMission, mission)) {
-        this.currentMission = mission;
-        this.drawnItems.clearLayers();
-
-        switch (mission.type) {
-          case "loiter":
-            this.drawLoiter(mission.data.lat, mission.data.lon, mission.data.radius);
-            break;
-          case "path":
-            this.drawPath(mission.data.points, mission.data.radius);
-            break;
-          case "land":
-            this.drawLand(
-              mission.data.lat,
-              mission.data.lon,
-              mission.data.heading,
-              mission.data.finalLeg,
-              mission.data.radius,
-              mission.data.direction
-            );
-            break;
-        }
       }
     });
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-  }
-
-  private isSameMission(mission1: any, mission2: any): boolean {
-    if (!mission1 || !mission2) return false;
-    if (mission1.type !== mission2.type) return false;
-    
-    // Simple deep comparison (for demo purposes - you might want a more robust solution)
-    return JSON.stringify(mission1) === JSON.stringify(mission2);
   }
 
   configMap() {

@@ -36,12 +36,30 @@ export class ConnectComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.webSocketService.messages$.subscribe(data => {
-      this.ports = data.serial.ports;
+    if (this.webSocketService.isOpen()) {
+      this.webSocketService.send({
+        type: 'status'
+      });
+      console.log("Requested serial status...");
+    }
 
-      if (data.serial.connected_port != "") {
-        this.selectedPort = data.serial.connected_port;
-        this.isConnected = true;
+    this.webSocketService.socketOpen$.subscribe(() => {
+      this.webSocketService.send({
+        type: 'status'
+      });
+      console.log("Requested serial status...");
+    });
+    
+    this.subscription = this.webSocketService.messages$.subscribe(data => {
+      if (data.type === "serial_status")
+      {
+        console.log(data);
+        this.ports = data.available;
+
+        if (data.connected) {
+          this.selectedPort = data.port;
+          this.isConnected = true;
+        }
       }
     });
   }

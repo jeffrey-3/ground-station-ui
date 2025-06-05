@@ -8,6 +8,8 @@ export class WebSocketService {
   private socket!: WebSocket;
   private messageSubject = new Subject<any>();
   public messages$ = this.messageSubject.asObservable();
+  private socketOpenSubject = new Subject<void>();
+  public socketOpen$ = this.socketOpenSubject.asObservable();
 
   constructor() {
     this.connect();
@@ -16,9 +18,15 @@ export class WebSocketService {
   private connect(): void {
     this.socket = new WebSocket('ws://localhost:8765');
 
+    this.socket.onopen = () => {
+      console.log('WebSocket connection opened.');
+      this.socketOpenSubject.next();  // Notify subscribers that the socket is ready
+    };
+
     this.socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+        // console.log(data);
         this.messageSubject.next(data);
       } catch (error) {
         console.error('Error parsing WebSocket message:', error);
@@ -35,6 +43,10 @@ export class WebSocketService {
       console.log('WebSocket disconnected. Attempting to reconnect...');
       setTimeout(() => this.connect(), 5000);
     };
+  }
+
+  public isOpen(): boolean {
+    return this.socket?.readyState === WebSocket.OPEN;
   }
 
   public send(data: any): void {
@@ -58,22 +70,36 @@ export class WebSocketService {
       data: {
         lat: lat,
         lon: lon,
-        radius: radius
+        radius: radius,
+        direction: 0,
+        final_leg: 0,
+        glideslope: 0 
       }
     });
   }
 
   public commandPath(points: number[][], radius: number) {
+    var data: any[] = [];
+
+    points.forEach(point => {
+      data.push({
+        type: "waypoint",
+        lat: point[0],
+        lon: point[1],
+        radius: radius,
+        direction: 0,
+        final_leg: 0,
+        glideslope: 0 
+      });
+    });
+    
     this.send({
-      type: "path",
-      data: {
-        points: points,
-        radius: radius
-      }
+      type: "send_mission",
+      data: data
     });
   }
 
-  public commandLand(lat: number, lon: number, finalLeg:number, glideslope: number, heading: number, radius: number, direction: string) {
+  public commandLand(lat: number, lon: number, finalLeg: number, glideslope: number, heading: number, radius: number, direction: string) {
     this.send({
       type: "land",
       data: {
