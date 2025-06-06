@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild, OnInit, inject } from '@angular/core';
+import { Component, signal, ViewChild, OnInit, inject, OnDestroy } from '@angular/core';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { WebSocketService } from '../../services/web-socket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-set-altitude',
@@ -14,9 +15,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './set-altitude.component.html',
   styleUrl: './set-altitude.component.scss'
 })
-export class SetAltitudeComponent implements OnInit {
+export class SetAltitudeComponent implements OnInit, OnDestroy {
   currentTargetAltitude = signal(null);
   targetAltitude: number | null = null;
+
+  private subscription!: Subscription;
 
   @ViewChild(MatInput) input!: MatInput;
 
@@ -25,7 +28,7 @@ export class SetAltitudeComponent implements OnInit {
   constructor(private dialog: MatDialog, private webSocketService: WebSocketService) {}
 
   ngOnInit(): void {
-    this.webSocketService.messages$.subscribe(data => {
+    this.subscription = this.webSocketService.messages$.subscribe(data => {
       if (data.type === "control_setpoints") {
         this.currentTargetAltitude.set(data.alt_sp);
       } else if (data.type === "set_altitude_result") {
@@ -56,5 +59,9 @@ export class SetAltitudeComponent implements OnInit {
         console.log('Cancelled');
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

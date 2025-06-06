@@ -22,11 +22,31 @@ export class DataComponent implements OnInit, OnDestroy {
     this.subscription = this.webSocketService.messages$.subscribe(data => {
       if (data.type === "vehicle_status") {
         this.status.set(data.mode);
-        this.batteryVoltage.set(12.5);
-        this.sats.set(15);
-        this.altitude.set(11.2);
+        this.altitude.set(data.alt);
+      } else if (data.type === "gps_raw") {
+        this.sats.set(data.sats);
+      } else if (data.type === "power") {
+        this.batteryVoltage.set(data.batt_volt);
       }
     });
+  }
+
+  formatAltitude(value: number): string {
+    const rounded = Math.round(value * 10) / 10; // Round to 1 decimal
+    const [integerPart, decimalPart = '0'] = rounded.toString().split('.');
+    const paddedInteger = integerPart.padStart(3, '0');
+    return `${paddedInteger}.${decimalPart}`;
+  }
+
+  formatSats(value: number): string {
+    return value.toString().padStart(2, '0');
+  }
+
+  formatBattery(value: number): string {
+    const rounded = Math.round(value * 100) / 100; // Round to 2 decimals
+    const [integerPart, decimalPart = '00'] = rounded.toString().split('.');
+    const paddedInteger = integerPart.padStart(1, '0');
+    return `${paddedInteger}.${decimalPart.padEnd(2, '0')}`;
   }
 
   ngOnDestroy(): void {

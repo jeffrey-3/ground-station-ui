@@ -78,10 +78,17 @@ export class ConnectComponent implements OnInit, OnDestroy {
         console.log(this.selectedPort);
         console.log('Sent');
 
-        this.webSocketService.connectComPort(this.selectedPort);
+        this.connectComPort(this.selectedPort);
       } else {
         console.log('Cancelled');
       }
+    });
+  }
+
+  connectComPort(port: string) {
+    this.webSocketService.send({
+      type: "connect",
+      port: port
     });
   }
 }

@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
+// NOTE: Every component MUST unsubscribe from the message subscription in OnDestroy 
+// otherwise the websocket will stay connected and cause issues!
+
 @Injectable({
   providedIn: 'root'
 })
@@ -55,63 +58,6 @@ export class WebSocketService {
     } else {
       console.error('WebSocket is not open. Cannot send data.');
     }
-  }
-
-  public connectComPort(port: string) {
-    this.send({
-      type: "connect",
-      port: port
-    });
-  }
-
-  public commandLoiter(lat: number, lon: number, radius: number) {
-    this.send({
-      type: "loiter",
-      data: {
-        lat: lat,
-        lon: lon,
-        radius: radius,
-        direction: 0,
-        final_leg: 0,
-        glideslope: 0 
-      }
-    });
-  }
-
-  public commandPath(points: number[][], radius: number) {
-    var data: any[] = [];
-
-    points.forEach(point => {
-      data.push({
-        type: "waypoint",
-        lat: point[0],
-        lon: point[1],
-        radius: radius,
-        direction: 0,
-        final_leg: 0,
-        glideslope: 0 
-      });
-    });
-    
-    this.send({
-      type: "send_mission",
-      data: data
-    });
-  }
-
-  public commandLand(lat: number, lon: number, finalLeg: number, glideslope: number, heading: number, radius: number, direction: string) {
-    this.send({
-      type: "land",
-      data: {
-        lat: lat,
-        lon: lon,
-        finalLeg: finalLeg,
-        glideslope: glideslope,
-        heading: heading,
-        radius: radius,
-        direction: direction
-      }
-    });
   }
 
   public close(): void {

@@ -22,7 +22,6 @@ export class MapComponent implements OnInit, OnDestroy {
   marker: any;
   drawControl: any;
   drawnItems: any;
-  private currentMission: any = null;
 
   private subscription!: Subscription;
 
@@ -57,9 +56,9 @@ export class MapComponent implements OnInit, OnDestroy {
         this.marker._icon.style[L.DomUtil.TRANSFORM] += 'rotate(' + data.yaw + 'deg)';
         this.marker._icon.style["transform-origin"] = "50% 50%";
       } else if (data.type === "mission") {
+        this.drawnItems.clearLayers();
+
         if (data.data[0].type === "waypoint") {
-          this.drawnItems.clearLayers();
-          
           const points: [number, number][] = []
         
           data.data.forEach((point: any) => {
@@ -67,44 +66,20 @@ export class MapComponent implements OnInit, OnDestroy {
           });
             
           this.drawPath(points, data.data[0].radius);
+        } else if (data.data[0].type === "loiter") {
+          this.drawLoiter(data.data[0].lat, data.data[0].lon, data.data[0].radius);
+        } else if (data.data[0].type === "land") {
+          console.log(data.data)
+          this.drawLand(
+            data.data[0].lat,
+            data.data[0].lon,
+            data.data[0].runway_heading,
+            data.data[0].final_leg,
+            data.data[0].radius,
+            data.data[0].direction
+          );
         }
       }
-
-      // if (data.type === "tasdsadssd") {
-      //   const telem = data.telemetry;
-
-      //   var newLatLng = new L.LatLng(telem.lat, telem.lon);
-
-      //   this.marker.setLatLng(newLatLng);
-      //   this.marker._icon.style[L.DomUtil.TRANSFORM] += 'rotate(' + telem.heading + 'deg)';
-      //   this.marker._icon.style["transform-origin"] = "50% 50%";
-        
-      //   const mission = data.mission
-
-      //   if (mission.type != null && !this.isSameMission(this.currentMission, mission)) {
-      //     this.currentMission = mission;
-      //     this.drawnItems.clearLayers();
-
-      //     switch (mission.type) {
-      //       case "loiter":
-      //         this.drawLoiter(mission.data.lat, mission.data.lon, mission.data.radius);
-      //         break;
-      //       case "path":
-      //         this.drawPath(mission.data.points, mission.data.radius);
-      //         break;
-      //       case "land":
-      //         this.drawLand(
-      //           mission.data.lat,
-      //           mission.data.lon,
-      //           mission.data.heading,
-      //           mission.data.finalLeg,
-      //           mission.data.radius,
-      //           mission.data.direction
-      //         );
-      //         break;
-      //     }
-      //   }
-      // }
 
       var visible = this.map.getBounds().contains(this.marker.getLatLng());
       if (!visible) {
@@ -184,7 +159,7 @@ export class MapComponent implements OnInit, OnDestroy {
           const layer = e.layer;
           const points = layer.getLatLngs();
           const pointArray = points.map((latlng: L.LatLng) => [latlng.lat, latlng.lng]);
-          this.webSocketService.commandPath(pointArray, result.radius);
+          this.commandPath(pointArray, result.radius);
         }
       });
     });
@@ -202,7 +177,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.webSocketService.commandLand(
+        this.commandLand(
           latlng.lat,
           latlng.lng, 
           result.extendFinalLeg, 
@@ -227,7 +202,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.webSocketService.commandLoiter(latlng.lat, latlng.lng, result.radius);
+        this.commandLoiter(latlng.lat, latlng.lng, result.radius);
       }
     });
   }
@@ -275,6 +250,8 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   drawLand(lat: number, lon: number, runwayHeading: number, finalLeg: number, radius: number, direction: string) {
+    console.log([lat, lon])
+
     const finalLegPosition = this.translateLatLon(lat, lon, finalLeg, runwayHeading + 180);
 
     L.polyline([[lat, lon], [finalLegPosition.lat, finalLegPosition.lon]], {
@@ -292,5 +269,59 @@ export class MapComponent implements OnInit, OnDestroy {
     const loiterPosition = this.translateLatLon(finalLegPosition.lat, finalLegPosition.lon, radius, perpendicularBearing);
 
     this.drawLoiter(loiterPosition.lat, loiterPosition.lon, radius);
+  }
+
+  commandLoiter(lat: number, lon: number, radius: number) {
+    this.webSocketService.send({
+      type: "send_mission",
+      data: [{
+        type: "loiter",
+        lat: lat,
+        lon: lon,
+        radius: radius,
+        direction: 0,
+        final_leg: 0,
+        glideslope: 0,
+        runway_heading: 0
+      }]
+    });
+  }
+
+  commandPath(points: number[][], radius: number) {
+    var data: any[] = [];
+
+    points.forEach(point => {
+      data.push({
+        type: "waypoint",
+        lat: point[0],
+        lon: point[1],
+        radius: radius,
+        direction: 0,
+        final_leg: 0,
+        glideslope: 0,
+        runway_heading: 0
+      });
+    });
+    
+    this.webSocketService.send({
+      type: "send_mission",
+      data: data
+    });
+  }
+
+  commandLand(lat: number, lon: number, finalLeg: number, glideslope: number, heading: number, radius: number, direction: string) {
+    this.webSocketService.send({
+      type: "send_mission",
+      data: [{
+        type: "land",
+        lat: lat,
+        lon: lon,
+        radius: radius,
+        direction: direction,
+        final_leg: finalLeg,
+        glideslope: glideslope,
+        runway_heading: heading
+      }]
+    });
   }
 }

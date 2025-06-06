@@ -1,4 +1,3 @@
-
 <div class="grid">
     <div class="container">
         <h1>{{ status() }}</h1>
@@ -6,17 +5,17 @@
     </div>
 
     <div class="container">
-        <h1>{{ altitude() }}</h1>
+        <h1>{{ formatAltitude(altitude()) }}</h1>
         <p>Altitude (m)</p>
     </div>
 
     <div class="container">
-        <h1>{{ sats() }}</h1>
+        <h1>{{ formatSats(sats()) }}</h1>
         <p>GPS Sats</p>
     </div>
 
     <div class="container">
-        <h1>{{ batteryVoltage() }}</h1>
+        <h1>{{ formatBattery(batteryVoltage()) }}</h1>
         <p>Battery (V)</p>
     </div>
 </div>

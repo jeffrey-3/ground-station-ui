@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, signal, inject } from '@angular/core';
+import { Component, ViewChild, OnInit, signal, inject, OnDestroy } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
@@ -22,7 +22,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   templateUrl: './parameters.component.html',
   styleUrl: './parameters.component.scss'
 })
-export class ParametersComponent implements OnInit {
+export class ParametersComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput')
   fileInput: any;
 
@@ -91,4 +91,8 @@ export class ParametersComponent implements OnInit {
     const files: { [key: string]: File } = this.fileInput.nativeElement.files;
     this.file = files[0];
   }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }  
 }
